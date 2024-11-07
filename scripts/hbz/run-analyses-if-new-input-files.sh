@@ -5,6 +5,7 @@
 
 APPDIR="/home/qa-catalogue/qa-catalogue"
 CATALOGUE=${1:-test}
+TASKS=${2:-all}
 DATADIR="${APPDIR}/input/${CATALOGUE}/marc"
 CHECKFILE="${DATADIR}/check_file.txt"
 RUNNINGFILE="${APPDIR}/running_${CATALOGUE}_analyses.txt"
@@ -20,7 +21,7 @@ if [[ -s "/tmp/newfiles$$" ]] ; then
   else
     touch "$RUNNINGFILE"
     cd $APPDIR
-    docker exec -i metadata-qa-marc ./catalogues/${CATALOGUE}.sh all
+    docker exec -i metadata-qa-marc ./catalogues/${CATALOGUE}.sh ${TASKS}
     echo "$(date) Finished analyses for ${CATALOGUE}!"
     rm "$RUNNINGFILE"
     touch "$CHECKFILE"
