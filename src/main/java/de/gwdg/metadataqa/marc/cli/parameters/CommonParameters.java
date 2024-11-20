@@ -50,7 +50,6 @@ public class CommonParameters implements Serializable {
   protected String ignorableRecords;
   @JsonIgnore
   protected RecordIgnorator recordIgnorator;
-  protected String ignorableRecords;
   protected RecordFilter recordFilter;
   protected IgnorableFields ignorableFields = new IgnorableFields();
   protected InputStream stream = null;
