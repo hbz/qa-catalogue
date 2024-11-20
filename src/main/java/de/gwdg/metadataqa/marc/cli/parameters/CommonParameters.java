@@ -47,6 +47,7 @@ public class CommonParameters implements Serializable {
   protected boolean lineSeparated = false;
   protected boolean trimId = false;
   private String outputDir = DEFAULT_OUTPUT_DIR;
+  protected String ignorableRecords;
   @JsonIgnore
   protected RecordIgnorator recordIgnorator;
   protected String ignorableRecords;
