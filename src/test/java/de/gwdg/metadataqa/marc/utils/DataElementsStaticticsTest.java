@@ -15,9 +15,9 @@ public class DataElementsStaticticsTest {
     assertEquals("There should be 230 defined fields in MARC core",  230, statistics.get(DataElementType.coreFields));
     assertEquals("There should be 186 defined indicators in MARC core",  186, statistics.get(DataElementType.coreIndicators));
     assertEquals("There should be 2688 defined subfields in MARC core", 2688, statistics.get(DataElementType.coreSubfields));
-    assertEquals("There should be 228 defined locally defined fields",  228, statistics.get(DataElementType.localFields));
-    assertEquals("There should be 30 defined locally defined indicators",   30, statistics.get(DataElementType.localIndicators));
-    assertEquals("There should be 1807 defined locally defined subfields", 1807, statistics.get(DataElementType.localSubfields));
-    assertEquals("There should be 5387 defined data elements", 5387, statistics.total());
+    assertEquals("There should be 303 defined locally defined fields",  303, statistics.get(DataElementType.localFields));
+    assertEquals("There should be 67 defined locally defined indicators",   67, statistics.get(DataElementType.localIndicators));
+    assertEquals("There should be 2566 defined locally defined subfields", 2566 , statistics.get(DataElementType.localSubfields));
+    assertEquals("There should be 6258 defined data elements", 6258, statistics.total());
   }
 }
