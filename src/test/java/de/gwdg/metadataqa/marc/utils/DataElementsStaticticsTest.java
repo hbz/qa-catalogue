@@ -1,8 +1,8 @@
 package de.gwdg.metadataqa.marc.utils;
 
-import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
+
+import org.junit.Test;
 
 public class DataElementsStaticticsTest {
 
@@ -17,7 +17,7 @@ public class DataElementsStaticticsTest {
     assertEquals("There should be 2688 defined subfields in MARC core", 2688, statistics.get(DataElementType.coreSubfields));
     assertEquals("There should be 303 defined locally defined fields",  303, statistics.get(DataElementType.localFields));
     assertEquals("There should be 67 defined locally defined indicators",   67, statistics.get(DataElementType.localIndicators));
-    assertEquals("There should be 2566 defined locally defined subfields", 2566 , statistics.get(DataElementType.localSubfields));
-    assertEquals("There should be 6258 defined data elements", 6258, statistics.total());
+    assertEquals("There should be 2567 defined locally defined subfields", 2567 , statistics.get(DataElementType.localSubfields));
+    assertEquals("There should be 6259 defined data elements", 6259, statistics.total());
   }
 }

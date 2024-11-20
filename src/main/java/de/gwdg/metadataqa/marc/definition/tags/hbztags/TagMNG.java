@@ -44,7 +44,8 @@ public class TagMNG extends DataFieldDefinition {
       "h", "Originating system version subfield", "R",
       "i", "Record format subfield", "R",
       "j", "Cataloging level subfield", "R",
-      "k", "Brief level subfield", "R"
+      "k", "Brief level subfield", "R",
+      "l", "Bibliographic rank subfield", "R"      
     );
   }
 }
