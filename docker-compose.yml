@@ -17,6 +17,7 @@ services:
       - ./${WEBBCONFIG:-web-config}:/var/www/html/qa-catalogue/config
       - /etc/timezone:/etc/timezone:ro    # Sync timezone
       - /etc/localtime:/etc/localtime:ro  # Sync localtime
+      - ./apache2/sites-available:/etc/apache2/sites-available
     ports:
       - "${WEBPORT:-8000}:80"       # qa-catalogue-web
       - "${SOLRPORT:-8983}:8983"  # Solr
