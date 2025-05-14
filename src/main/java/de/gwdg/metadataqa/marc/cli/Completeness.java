@@ -83,6 +83,7 @@ public class Completeness extends QACli<CompletenessParameters> implements Bibli
       System.exit(0);
     }
     RecordIterator iterator = new RecordIterator(processor);
+    iterator.setProcessWithErrors(processor.getParameters().getProcessRecordsWithoutId());
     iterator.start();
   }
 
@@ -98,7 +99,7 @@ public class Completeness extends QACli<CompletenessParameters> implements Bibli
 
   @Override
   public void processRecord(BibliographicRecord marcRecord, int recordNumber, List<ValidationError> errors) throws IOException {
-    // do nothing
+    processRecord(marcRecord, recordNumber);
   }
 
   @Override

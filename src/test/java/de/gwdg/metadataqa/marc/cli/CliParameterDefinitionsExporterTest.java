@@ -9,6 +9,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -21,7 +22,6 @@ public class CliParameterDefinitionsExporterTest {
     CliParameterDefinitionsExporter extractor = new CliParameterDefinitionsExporter();
     String json = extractor.exportAll();
     assertNotNull(json);
-    System.err.println(json);
     assertTrue(json.contains("\"common\""));
     ObjectMapper mapper = new ObjectMapper();
     Map firstItem = null;
@@ -29,19 +29,20 @@ public class CliParameterDefinitionsExporterTest {
     try {
       parameters = (LinkedHashMap) mapper.readValue(json, Object.class);
 
-      assertEquals(15, parameters.size());
+      assertEquals(17, parameters.size());
       assertEquals(
         Set.of(
           "common", "completeness", "validate", "index", "classifications",
           "authorities", "tt-completeness", "shelf-ready-completeness",
           "bl-classification", "serial-score", "formatter", "functional-analysis",
-          "network-analysis", "record-patterns", "shacl4bib"
+          "network-analysis", "marc-history", "record-patterns", "shacl4bib",
+          "translations"
         ),
         parameters.keySet());
 
       assertTrue(parameters.containsKey("common"));
       assertEquals(ArrayList.class, parameters.get("common").getClass());
-      assertEquals(30, ((List) parameters.get("common")).size());
+      assertEquals(31, ((List) parameters.get("common")).size());
 
       firstItem = (Map) ((List) parameters.get("common")).get(0);
       assertEquals(4, firstItem.size());
@@ -69,7 +70,7 @@ public class CliParameterDefinitionsExporterTest {
       assertEquals("the summary file name (provides a summary of issues, such as the number of instance and number of records having the particular issue)", firstItem.get("description"));
 
       assertTrue(parameters.containsKey("index"));
-      assertEquals(8, ((List) parameters.get("index")).size());
+      assertEquals(9, ((List) parameters.get("index")).size());
       firstItem = (Map) ((List) parameters.get("index")).get(0);
       assertEquals(4, firstItem.size());
       assertEquals("S", firstItem.get("short"));
@@ -126,7 +127,7 @@ public class CliParameterDefinitionsExporterTest {
       assertEquals("the report file name (default is serial-score.csv)", firstItem.get("description"));
 
       assertTrue(parameters.containsKey("formatter"));
-      assertEquals(7, ((List) parameters.get("formatter")).size());
+      assertEquals(8, ((List) parameters.get("formatter")).size());
       firstItem = (Map) ((List) parameters.get("formatter")).get(0);
       assertEquals(4, firstItem.size());
       assertEquals("l", firstItem.get("short"));
@@ -152,6 +153,9 @@ public class CliParameterDefinitionsExporterTest {
       assertEquals(true, firstItem.get("hasArg"));
       assertEquals("pair creation limit", firstItem.get("description"));
 
+      assertTrue(parameters.containsKey("marc-history"));
+      assertEquals(0, ((List) parameters.get("marc-history")).size());
+
       assertTrue(parameters.containsKey("record-patterns"));
       assertEquals(3, ((List) parameters.get("record-patterns")).size());
       firstItem = (Map) ((List) parameters.get("record-patterns")).get(0);
@@ -164,6 +168,20 @@ public class CliParameterDefinitionsExporterTest {
       assertTrue(parameters.containsKey("shacl4bib"));
       assertEquals(3, ((List) parameters.get("shacl4bib")).size());
       firstItem = (Map) ((List) parameters.get("shacl4bib")).get(0);
+      assertEquals(4, firstItem.size());
+      assertEquals("C", firstItem.get("short"));
+      assertEquals("shaclConfigurationFile", firstItem.get("long"));
+      assertEquals(true, firstItem.get("hasArg"));
+      assertEquals("specify the configuration file", firstItem.get("description"));
+
+      assertTrue(parameters.containsKey("translations"));
+      assertEquals(6, ((List) parameters.get("translations")).size());
+      assertEquals(
+        "shaclConfigurationFile, shaclOutputFile, shaclOutputType, translationDebugFailedRules, translationPlaceNameDictionaryDir, translationExport",
+        ((List<?>) parameters.get("translations")).stream()
+        .map(s -> ((Map<String, Object>) s).get("long").toString())
+        .collect(Collectors.joining(", ")));
+      firstItem = (Map) ((List) parameters.get("translations")).get(0);
       assertEquals(4, firstItem.size());
       assertEquals("C", firstItem.get("short"));
       assertEquals("shaclConfigurationFile", firstItem.get("long"));

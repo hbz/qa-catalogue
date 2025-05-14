@@ -17,7 +17,6 @@ import de.gwdg.metadataqa.marc.definition.bibliographic.SchemaType;
 import de.gwdg.metadataqa.marc.definition.structure.ControlfieldPositionDefinition;
 import de.gwdg.metadataqa.marc.definition.structure.DataFieldDefinition;
 import de.gwdg.metadataqa.marc.model.SolrFieldType;
-import de.gwdg.metadataqa.marc.utils.marcspec.legacy.MarcSpec;
 import de.gwdg.metadataqa.marc.utils.unimarc.UnimarcConverter;
 
 import java.util.ArrayList;
@@ -37,7 +36,7 @@ public class Marc21Record extends MarcRecord {
   );
 
   private static final Pattern positionalPattern = Pattern.compile("^(Leader|00[678])/(.*)$");
-  protected static final List<String> allowedControlFieldTags = Arrays.asList("001", "003", "005", "006", "007", "008");
+  protected static final List<String> allowedControlFieldTags = Arrays.asList("001", "003", "005", "006", "007", "008", "009");
 
   private final List<Control006> control006 = new ArrayList<>();
   private final List<Control007> control007 = new ArrayList<>();
@@ -264,6 +263,7 @@ public class Marc21Record extends MarcRecord {
   // TODO: This method wasn't being called anyway, because there was another if statement before its execution
   //  which was returning the results. The select method is extracted into MarcRecord and this selectControl008 method
   //  is not being called anywhere now. If it's not needed, it should be removed.
+  /*
   private List<String> selectControl008(MarcSpec selector) {
     List<String> selectedResults = new ArrayList<>();
 
@@ -276,6 +276,7 @@ public class Marc21Record extends MarcRecord {
 
     return selectedResults;
   }
+  */
 
   @Override
   public List<String> getAllowedControlFieldTags() {

@@ -16,7 +16,9 @@ public enum MarcVersion {
   KBR(     "KBR",      "KBR"),
   ZB(      "ZB",       "Zentralbibliothek Zürich"),
   OGYK(    "OGYK",     "Országygyűlési Könyvtár, Budapest"),
-  HBZ(     "HBZ",     "Hochschulbibliothekszentrum des Landes Nordrhein-Westfalen (hbz)");
+  HBZ(     "HBZ",      "Hochschulbibliothekszentrum des Landes Nordrhein-Westfalen (hbz)"),
+  HUNMARC( "HUNMARC",  "Hungarian MARC"),
+  ;
 
   String code;
   String label;

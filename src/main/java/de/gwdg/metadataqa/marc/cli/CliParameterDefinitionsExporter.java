@@ -10,6 +10,7 @@ import de.gwdg.metadataqa.marc.cli.parameters.SerialScoreParameters;
 import de.gwdg.metadataqa.marc.cli.parameters.Shacl4bibParameters;
 import de.gwdg.metadataqa.marc.cli.parameters.ShelfReadyCompletenessParameters;
 import de.gwdg.metadataqa.marc.cli.parameters.ThompsonTraillCompletenessParameters;
+import de.gwdg.metadataqa.marc.cli.parameters.TranslationParameters;
 import de.gwdg.metadataqa.marc.cli.parameters.ValidatorParameters;
 import net.minidev.json.JSONValue;
 import org.apache.commons.cli.Option;
@@ -50,9 +51,11 @@ public class CliParameterDefinitionsExporter {
     options.put("formatter", export(new FormatterParameters())); // TODO at common-script
     options.put("functional-analysis", export(new CompletenessParameters())); // TODO
     options.put("network-analysis", export(new NetworkParameters()));
+    options.put("marc-history", export(new CommonParameters()));
     options.put("record-patterns", export(new CompletenessParameters())); // TODO
     // options.put("export-schema", read(new MappingParameters()));
     options.put("shacl4bib", export(new Shacl4bibParameters()));
+    options.put("translations", export(new TranslationParameters()));
 
     return mapToJson();
   }

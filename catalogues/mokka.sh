@@ -6,6 +6,8 @@
 
 NAME=mokka
 TYPE_PARAMS="--marcxml --emptyLargeCollectors"
+# index parameters
+TYPE_PARAMS="${TYPE_PARAMS} --indexWithTokenizedField --indexFieldCounts --indexSubfieldCounts"
 # TYPE_PARAMS="--marcVersion SZTE"
 MASK=all.xml.gz
 

@@ -13,6 +13,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -63,7 +64,7 @@ public class PicaSchemaReader {
 
   public static PicaSchemaManager createSchemaManager(String picaSchemaFile) {
     logger.info("read schema");
-    PicaSchemaManager picaSchemaManager;
+    PicaSchemaManager picaSchemaManager = null;
     String schemaFile = null;
     if (StringUtils.isNotEmpty(picaSchemaFile)) {
       logger.info("getPicaSchemaFile");
@@ -71,6 +72,9 @@ public class PicaSchemaReader {
     } else if (new File("src/main/resources/pica/avram-k10plus-title.json").exists()) {
       logger.info("default file");
       schemaFile = Paths.get("src/main/resources/pica/avram-k10plus-title.json").toAbsolutePath().toString();
+    } else if (new File("avram-schemas/k10plus-title.json").exists()) {
+      logger.info("from avram-schemas directory");
+      schemaFile = Paths.get("avram-schemas/k10plus-title.json").toAbsolutePath().toString();
     }
 
     if (schemaFile != null && new File(schemaFile).exists()) {
@@ -78,7 +82,16 @@ public class PicaSchemaReader {
       picaSchemaManager = PicaSchemaReader.createSchema(schemaFile);
     } else {
       logger.info("read from resource");
-      picaSchemaManager = PicaSchemaReader.createSchema(PicaSchemaReader.class.getClassLoader().getResourceAsStream("pica/avram-k10plus-title.json"));
+      ClassLoader classLoader = PicaSchemaReader.class.getClassLoader();
+      URL resource = classLoader.getResource("pica/avram-k10plus-title.json");
+      if (resource != null) {
+        logger.info("Resource's URL is " + resource.toString());
+        InputStream schemaStream = classLoader.getResourceAsStream("pica/avram-k10plus-title.json");
+        picaSchemaManager = PicaSchemaReader.createSchema(schemaStream);
+      } else {
+        logger.info("resource is null, Avram schema is not available this way");
+        new IllegalStateException("Avram schema is not available");
+      }
     }
     return picaSchemaManager;
   }

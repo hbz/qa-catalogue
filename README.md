@@ -62,8 +62,6 @@ Screenshot from the web UI of the QA catalogue
       * [Index preparation](#index-preparation)
     * [Indexing MARC JSON records with Solr](#indexing-marc-json-records-with-solr)
     * [Export mapping table](#export-mapping-table)
-      * [to Avram JSON](#to-avram-json)
-      * [to HTML](#to-html)
     * [Shacl4Bib](#Shacl4Bib) 
 * [Extending the functionalities](#extending-the-functionalities)
 * [User interface](#user-interface)
@@ -299,10 +297,12 @@ cp setdir.sh.template setdir.sh
 ```bash
 BASE_INPUT_DIR=your/path
 BASE_OUTPUT_DIR=your/path
+BASE_LOG_DIR==your/path
 ```
 
 * `BASE_INPUT_DIR` is the parent directory where your MARC records exists
 * `BASE_OUTPUT_DIR` is where the analysis results will be stored
+* `BASE_LOG_DIR` is where the analysis logs will be stored
 
 3. edit the library specific file
 
@@ -342,21 +342,22 @@ The following table summarizes the configuration variables. The script
 `qa-catalogue` can be used to set variables and execute analysis without a
 library specific configuration file:
 
-| variable          | `qa-catalogue`      | description                                                        | default                                                                                                                                                                                 |
-|-------------------|---------------------|--------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `ANALYSES`        | `-a`/`--analyses`   | which tasks to run with `all-analyses`                             | `validate, validate_sqlite, completeness, completeness_sqlite, classifications, authorities, tt_completeness, shelf_ready_completeness, serial_score, functional_analysis, pareto, marc_history` |
-|                   | `-c`/`--catalogue`  | display name of the catalogue                                      | `$NAME`                                                                                                                                                                                 |
-| `NAME`            | `-n`/`--name`       | name of the catalogue                                              | qa-catalogue                                                                                                                                                                            |
-| `BASE_INPUT_DIR`  | `-d`/`--input`      | parent directory of input file directories                         | `./input`                                                                                                                                                                               |
-| `INPUT_DIR`       | `-d`/`--input-dir`  | subdirectory of input directory to read files from                 |                                                                                                                                                                                         |
-| `BASE_OUTPUT_DIR` | `-o`/`--output`     | parent output directory                                            | `./output`                                                                                                                                                                              |
-| `MASK`            | `-m`/`--mask`       | a file mask which input files to process, e.g. `*.mrc`             | `*`                                                                                                                                                                                     |
-| `TYPE_PARAMS`     | `-p`/`--params`     | parameters to pass to individual tasks (see below)                 |                                                                                                                                                                                         |
-| `SCHEMA`          | `-s`/`--schema`     | record schema                                                      | `MARC21`                                                                                                                                                                                |
-| `UPDATE`          | `-u`/`--update`     | optional date of input files                                       |                                                                                                                                                                                         |
-| `VERSION`         | `-v`/`--version`    | optional version number/date of the catalogue to compare changes   |                                                                                                                                                                                         |
-| `WEB_CONFIG`      | `-w`/`--web-config` | update the specified configuration file of qa-catalogue-web        |                                                                                                                                                                                         |
-|                   | `-f`/`--env-file`| configuration file to load environment variables from (default: `.env`) |                                                                                                                                                                                         |
+| variable          | `qa-catalogue`      | description                                                             | default                                                                                                                                                                                          |
+|-------------------|---------------------|-------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `ANALYSES`        | `-a`/`--analyses`   | which tasks to run with `all-analyses`                                  | `validate, validate_sqlite, completeness, completeness_sqlite, classifications, authorities, tt_completeness, shelf_ready_completeness, serial_score, functional_analysis, pareto, marc_history` |
+|                   | `-c`/`--catalogue`  | display name of the catalogue                                           | `$NAME`                                                                                                                                                                                          |
+| `NAME`            | `-n`/`--name`       | name of the catalogue                                                   | qa-catalogue                                                                                                                                                                                     |
+| `BASE_INPUT_DIR`  | `-d`/`--input`      | parent directory of input file directories                              | `./input`                                                                                                                                                                                        |
+| `INPUT_DIR`       | `-d`/`--input-dir`  | subdirectory of input directory to read files from                      |                                                                                                                                                                                                  |
+| `BASE_OUTPUT_DIR` | `-o`/`--output`     | parent output directory                                                 | `./output`                                                                                                                                                                                       |
+| `BASE_LOG_DIR` | `-l`/`--logs`        | directory of log files                                                  | `./logs`                                                                                                                                                                                         |
+| `MASK`            | `-m`/`--mask`       | a file mask which input files to process, e.g. `*.mrc`                  | `*`                                                                                                                                                                                              |
+| `TYPE_PARAMS`     | `-p`/`--params`     | parameters to pass to individual tasks (see below)                      |                                                                                                                                                                                                  |
+| `SCHEMA`          | `-s`/`--schema`     | record schema                                                           | `MARC21`                                                                                                                                                                                         |
+| `UPDATE`          | `-u`/`--update`     | optional date of input files                                            |                                                                                                                                                                                                  |
+| `VERSION`         | `-v`/`--version`    | optional version number/date of the catalogue to compare changes        |                                                                                                                                                                                                  |
+| `WEB_CONFIG`      | `-w`/`--web-config` | update the specified configuration file of qa-catalogue-web             |                                                                                                                                                                                                  |
+|                   | `-f`/`--env-file`   | configuration file to load environment variables from (default: `.env`) |                                                                                                                                                                                                  |
 
 ## Detailed instructions
 
@@ -704,10 +705,10 @@ total
 ```
 
 * `issue-by-category.csv`: the counts of issues by categories. Columns:
- * `id` the identifier of error category
- * `category` the name of the category
- * `instances` the number of instances of errors within the category (one record might have multiple instances of the same error)
- * `records` the number of records having at least one of the errors within the category
+  * `id` the identifier of error category
+  * `category` the name of the category
+  * `instances` the number of instances of errors within the category (one record might have multiple instances of the same error)
+  * `records` the number of records having at least one of the errors within the category
 
 ```csv
 id,category,instances,records
@@ -1100,7 +1101,10 @@ or with a bash script
 
 options:
 * [general parameters](#general-parameters)
-* `-f`, `--format`: the name of the format (at time of writing there is no any)
+* `-f`, `--format`: the MARC output format
+  * if not set, the output format follows the examples in the MARC21 
+    documentation (see the example below)
+  * `xml`: the output will be MARCXML
 * `-c <number>`, `-countNr <number>`: count number of the record (e.g. 1 means
   the first record)
 * `-s [path=query]`, `-search [path=query]`: print records matching the query.
@@ -1118,6 +1122,8 @@ options:
   (default: TAB)
 * `-e <file>`, `--fileName <file>`: the name of report the program produces
   (default: `extracted.csv`)
+* `-A <identifiers>`, `--ids <identifiers>`: a comma separated list of record 
+  identifiers 
 
 The output of displaying a single MARC record is something like this one:
 
@@ -1823,6 +1829,7 @@ options:
   with `_txt`). \[This parameter is available from v0.8.0\]
 * `-D <int>`, `--commitAt <int>`: commit index after this number of records \[This parameter is available from v0.8.0\]
 * `-E`, `--indexFieldCounts`: index the count of field instances \[This parameter is available from v0.8.0\]
+* `-G`, `--indexSubfieldCounts`: index the count of subfield instances \[This parameter is available from v0.8.0\]
 * `-F`, `--fieldPrefix <arg>`: field prefix
 
 The `./index` file (which is used by `catalogues/[catalogue].sh` and `./qa-catalogue` scripts) has additional parameters:
@@ -2041,113 +2048,7 @@ The MARC JSON file is a JSON serialization of binary MARC file. See more the
 
 ## Export mapping table
 
-### to Avram JSON
-
-Some background info: [MARC21 structure in JSON](http://pkiraly.github.io/2018/01/28/marc21-in-json/).
-
-Usage:
-
-```bash
-java -cp $JAR de.gwdg.metadataqa.marc.cli.utils.MappingToJson [options] > avram-schema.json
-```
-
-or
-
-```bash
-./qa-catalogue --params="[options]" export-schema-files
-```
-
-options:
-* [general parameters](#general-parameters)
-* `-c`, `--withSubfieldCodelists`: with subfield codelists
-* `-s`, `--withSelfDescriptiveCode`: with self-descriptive codes
-* `-t <type>`, `--solrFieldType <type>`: type of Solr fields, could be one of
-  `marc-tags`, `human-readable`, or `mixed`
-* `-f`, `--withFrbrFunctions`: with FRBR functions (see Tom Delsey: 
-  [Functional analysis of the MARC 21 bibliographic and holdings formats.](https://www.loc.gov/marc/marc-functional-analysis/original_source/analysis.pdf)
-  Tech. report, 2nd revision. Library of Congress, 2003.)
-* `-l`, `--withComplianceLevel`: with compliance levels (national, minimal)
-  (see [National Level Full and Minimal Requirements.](https://www.loc.gov/marc/bibliographic/nlr/nlr.html)
-  Library of Congress, 1999.)
-
-An example output:
-```json
-...
-"010":{
-  "tag":"010",
-  "label":"Library of Congress Control Number",
-  "url":"https:\/\/www.loc.gov\/marc\/bibliographic\/bd010.html",
-  "repeatable":false,
-  "compilance-level":{
-    "national":"Mandatory if applicable",
-    "minimal":"Mandatory if applicable"
-  },
-  "indicator1":null,
-  "indicator2":null,
-  "subfields":{
-    "a":{
-      "label":"LC control number",
-      "repeatable":false,
-      "frbr-functions":[
-        "Data Management\/Identify",
-        "Data Management\/Process"
-      ],
-      "compilance-level":{
-        "national":"Mandatory if applicable",
-        "minimal":"Mandatory if applicable"
-      }
-    },
-    ...
-  }
-},
-"013":{
-  "tag":"013",
-  "label":"Patent Control Information",
-  "url":"https:\/\/www.loc.gov\/marc\/bibliographic\/bd013.html",
-  "repeatable":true,
-  "compilance-level":{"national":"Optional"},
-  "indicator1":null,
-  "indicator2":null,
-  "subfields":{
-    ...
-    "b":{
-      "label":"Country",
-      "repeatable":false,
-      "codelist":{
-        "name":"MARC Code List for Countries",
-        "url":"http:\/\/www.loc.gov\/marc\/countries\/countries_code.html",
-        "codes":{
-          "aa":{"label":"Albania"},
-          "abc":{"label":"Alberta"},
-          "-ac":{"label":"Ashmore and Cartier Islands"},
-          "aca":{"label":"Australian Capital Territory"},
-          ...
-        },
-        ...
-      },
-    },
-    ...
-  }
-},
-...
-```
-
-The script version generates 3 files, with different details:
-* `avram-schemas/marc-schema.json`
-* `avram-schemas/marc-schema-with-solr.json`
-* `avram-schemas/marc-schema-with-solr-and-extensions.json`
-
-To validate these files install the Avram reference implementation in Node with `npm ci` and run:
-
-	./avram-schemas/validate-schemas
-
-### to HTML
-
-To export the HTML table described at [Self Descriptive MARC code](http://pkiraly.github.io/2017/09/24/mapping/)
-
-```bash
-java -cp $JAR de.gwdg.metadataqa.marc.cli.utils.MappingToHtml > mapping.html
-```
+See <https://pkiraly.github.io/qa-catalogue/avram-schemas.html>.
 
 ### Shacl4Bib
 
@@ -2291,6 +2192,15 @@ Here is a list of data sources I am aware of so far:
 * University of Amsterdam Library &mdash; https://uba.uva.nl/en/support/open-data/data-sets-and-publication-channels/data-sets-and-publication-channels.html 2.7 million records, MARCXML, [PDDL](https://opendatacommons.org/licenses/pddl/)/[ODC-BY](https://opendatacommons.org/licenses/by/). Note: the record for books are not downloadable, only other document types. One should request them via the website.
 * Portugal National Library &mdash; https://opendata.bnportugal.gov.pt/downloads.htm. 1.13 million UNIMARC records in MARCXML, RDF XML, JSON, TURTLE and CSV formats. [CC0](https://creativecommons.org/share-your-work/public-domain/cc0/)
 * National Library of Latvia National bibliography (2017–2020) &mdash; https://dati.lnb.lv/. 11K MARCXML records.
+* Open datasets of the Czech National Library &mdash; https://www.en.nkp.cz/about-us/professional-activities/open-data [CC0](https://creativecommons.org/share-your-work/public-domain/cc0/)
+  * Czech National Bibliography &mdash; https://aleph.nkp.cz/data/cnb.xml.gz
+  * National Authority File &mdash; https://aleph.nkp.cz/data/aut.xml.gz
+  * Online Catalogue of the National Library of the Czech Republic &mdash; https://aleph.nkp.cz/data/nkc.xml.gz
+  * Union Catalogue of the Czech Republic &mdash; https://aleph.nkp.cz/data/skc.xml.gz
+  * Articles from Czech Newspapers, Periodicals and Proceedings &mdash; https://aleph.nkp.cz/data/anl.xml.gz
+  * Online Catalogue of the Slavonic Library &mdash; https://aleph.nkp.cz/data/slk.xml.gz
+* Estonian National Bibliography &mdash; as downloadable TSV or MARC21 via OAI-PMH https://digilab.rara.ee/en/datasets/estonian-national-bibliography/ [CC0](https://creativecommons.org/share-your-work/public-domain/cc0/)
+* A bibliographic dataset of the Danish Royal Library (Det Kgl. Bibliotek) including Danish monographs from approx. 1600-1900. &mdash; https://loar.kb.dk/handle/1902/49107 849K records, MARCXML, [PDM 1.0](http://creativecommons.org/publicdomain/mark/1.0/)
 
 Thanks, [Johann Rolschewski](https://github.com/jorol/), [Phú](https://twitter.com/herr_tu), and [Hugh Paterson III]
 (https://twitter.com/thejourneyler) for their help in collecting this list! Do you know some more data sources? Please let me know.

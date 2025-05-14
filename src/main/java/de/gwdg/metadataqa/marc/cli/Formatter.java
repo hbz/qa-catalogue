@@ -15,10 +15,15 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.lang3.StringUtils;
+import org.marc4j.MarcException;
+import org.marc4j.MarcXmlWriter;
 import org.marc4j.marc.Record;
 
 import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -40,6 +45,7 @@ public class Formatter implements BibliographicInputProcessor {
   private final FormatterParameters parameters;
   private final boolean readyToProcess;
   private BufferedWriter writer;
+  private MarcXmlWriter marcXmlWriter;
 
   public Formatter(String[] args) throws ParseException {
     parameters = new FormatterParameters(args);
@@ -47,7 +53,6 @@ public class Formatter implements BibliographicInputProcessor {
   }
 
   public static void main(String[] args) {
-    logger.severe(() -> "'" + StringUtils.join(args, "', '") + "'");
     try {
       BibliographicInputProcessor processor = new Formatter(args);
       if (processor.getParameters().getArgs().length < 1) {
@@ -60,6 +65,7 @@ public class Formatter implements BibliographicInputProcessor {
       }
       RecordIterator iterator = new RecordIterator(processor);
       logger.info(() -> processor.getParameters().formatParameters());
+      iterator.setProcessWithErrors(processor.getParameters().getProcessRecordsWithoutId());
       iterator.start();
     } catch(Exception e) {
       logger.severe(() -> "ERROR. " + e.getLocalizedMessage());
@@ -85,6 +91,7 @@ public class Formatter implements BibliographicInputProcessor {
 
     // print headers
     if (parameters.hasSelector()) {
+      logger.info("has selector");
       var path = Paths.get(parameters.getOutputDir(), parameters.getFileName());
       try {
         writer = Files.newBufferedWriter(path);
@@ -103,6 +110,18 @@ public class Formatter implements BibliographicInputProcessor {
         logger.log(Level.WARNING, "beforeIteration", e);
       }
     }
+    if (parameters.getIds() != null && !parameters.getIds().isEmpty()
+        && parameters.getFormat().equals("xml")) {
+      var path = Paths.get(parameters.getOutputDir(), parameters.getFileName());
+      logger.info("path: " + path.toAbsolutePath());
+      try {
+        // outputStream = new FileOutputStream(path.toFile());
+        marcXmlWriter = new MarcXmlWriter(new FileOutputStream(path.toFile()));
+        marcXmlWriter.setIndent(true);
+      } catch (FileNotFoundException e) {
+        logger.log(Level.WARNING, "beforeIteration", e);
+      }
+    }
   }
 
   @Override
@@ -112,36 +131,48 @@ public class Formatter implements BibliographicInputProcessor {
 
   @Override
   public void processRecord(Record marc4jRecord, int recordNumber) throws IOException {
-    boolean hasSpecifiedId = parameters.hasId() &&
-      marc4jRecord.getControlNumber() != null &&
-      marc4jRecord.getControlNumber().trim().equals(parameters.getId());
+    String id = marc4jRecord.getControlNumber() != null ?
+      marc4jRecord.getControlNumber().trim() : null;
+
+    boolean hasSpecifiedId = parameters.hasId() && id != null && id.equals(parameters.getId());
+
+    if (!hasSpecifiedId)
+      hasSpecifiedId = id != null
+                       && parameters.getIds() != null
+                       && !parameters.getIds().isEmpty()
+                       && parameters.getIds().contains(id);
 
     boolean hasSpecifiedRecordNumber = parameters.getCountNr() > -1
       && parameters.getCountNr() == recordNumber;
 
     if (hasSpecifiedId || hasSpecifiedRecordNumber) {
-      logger.info(marc4jRecord::toString);
+      if (parameters.getFormat().equals("xml")) {
+        marcXmlWriter.write(marc4jRecord);
+        // MarcXmlWriter.writeSingleRecord(marc4jRecord, System.out, true);
+        // MarcXmlWriter.writeSingleRecord(marc4jRecord, outputStream, true);
+      } else {
+        logger.info(marc4jRecord::toString);
+      }
     }
   }
 
   @Override
-  public void processRecord(BibliographicRecord marcRecord, int recordNumber, List<ValidationError> errors) throws IOException {
-    // do nothing
+  public void processRecord(BibliographicRecord bibliographicRecord, int recordNumber, List<ValidationError> errors) throws IOException {
+    processRecord(bibliographicRecord, recordNumber);
   }
 
   @Override
-  public void processRecord(BibliographicRecord marcRecord, int recordNumber) throws IOException {
-    if (parameters.hasId() && marcRecord.getId().trim().equals(parameters.getId())) {
-      for (DataField field : marcRecord.getDatafields()) {
+  public void processRecord(BibliographicRecord bibliographicRecord, int recordNumber) throws IOException {
+    if (parameters.hasId() && bibliographicRecord.getId().trim().equals(parameters.getId())) {
+      for (DataField field : bibliographicRecord.getDatafields()) {
        logger.info(field.getTag());
       }
-      logger.info(() -> "has STA: " + marcRecord.hasDatafield("STA"));
     }
 
     if (parameters.hasSearch()) {
-      List<String> results = marcRecord.search(parameters.getPath(), parameters.getQuery());
+      List<String> results = bibliographicRecord.search(parameters.getPath(), parameters.getQuery());
       if (!results.isEmpty()) {
-        logger.info(marcRecord::toString);
+        logger.info(bibliographicRecord::toString);
       }
     }
     if (!parameters.hasSelector()) {
@@ -150,13 +181,13 @@ public class Formatter implements BibliographicInputProcessor {
 
     List<String> selectionResults = new ArrayList<>();
     if (parameters.withId()) {
-      selectionResults.add(marcRecord.getId());
+      selectionResults.add(bibliographicRecord.getId());
     }
     if (parameters.getSchemaType().equals(SchemaType.PICA)) {
-      List<String> selectedPicaResults = selectPicaResults((PicaRecord) marcRecord);
+      List<String> selectedPicaResults = selectPicaResults((PicaRecord) bibliographicRecord);
       selectionResults.addAll(selectedPicaResults);
     } else {
-      List<String> selectedMarcResults = selectMarcResults((MarcRecord) marcRecord);
+      List<String> selectedMarcResults = selectMarcResults((MarcRecord) bibliographicRecord);
       selectionResults.addAll(selectedMarcResults);
     }
 
@@ -174,15 +205,20 @@ public class Formatter implements BibliographicInputProcessor {
 
   @Override
   public void afterIteration(int numberOfprocessedRecords, long duration) {
-    if (writer == null) {
-      return;
-    }
 
-    try {
-      writer.close();
-    } catch (IOException e) {
-      logger.log(Level.SEVERE, "afterIteration", e);
-    }
+    if (writer != null)
+      try {
+        writer.close();
+      } catch (IOException e) {
+        logger.log(Level.SEVERE, "afterIteration", e);
+      }
+
+    if (marcXmlWriter != null)
+      try {
+        marcXmlWriter.close();
+      } catch (MarcException e) {
+        logger.log(Level.SEVERE, "afterIteration", e);
+      }
   }
 
   private List<String> selectPicaResults(PicaRecord picaRecord) {
