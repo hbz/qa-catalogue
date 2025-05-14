@@ -18,6 +18,6 @@ public class DataElementsStaticticsTest {
     assertEquals("There should be 303 defined locally defined fields",  303, statistics.get(DataElementType.localFields));
     assertEquals("There should be 67 defined locally defined indicators",   67, statistics.get(DataElementType.localIndicators));
     assertEquals("There should be 2568 defined locally defined subfields", 2568 , statistics.get(DataElementType.localSubfields));
-    assertEquals("There should be 6259 defined data elements", 6259, statistics.total());
+    assertEquals("There should be 6260 defined data elements", 6260, statistics.total());
   }
 }
