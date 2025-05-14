@@ -14,11 +14,7 @@ $type = $argv[1];
 $parameters = $argv;
 $full_definition = json_decode(file_get_contents('cli-parameter-definitions.json'));
 if (!isset($full_definition->{$type})) {
-  if (in_array($type, ['marc-history', 'bl-classification'])) {
-    $type = 'common';
-  } else {
-    die('ERROR: undefined type: ' . $type . LN);
-  }
+  die('ERROR: undefined type: ' . $type . LN);
 }
 
 $param_definitions = array_merge($full_definition->common, $full_definition->{$type});

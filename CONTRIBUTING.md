@@ -1,1 +1,2 @@
-See [docs/contributing.qmd](docs/contributing.qmd), published at <https://pkiraly.github.io/qa-catalogue/contributing.html>.
+The contributing guide is available in the wiki of QA catalogue project:
+https://github.com/pkiraly/qa-catalogue/wiki/Contribution-guide

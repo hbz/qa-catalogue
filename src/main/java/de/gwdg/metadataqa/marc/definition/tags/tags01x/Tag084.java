@@ -20,7 +20,7 @@ import static de.gwdg.metadataqa.marc.definition.FRBRFunction.ManagementIdentify
 import static de.gwdg.metadataqa.marc.definition.FRBRFunction.ManagementProcess;
 
 /**
- * Other Classification Number
+ * Other Classificaton Number
  * https://www.loc.gov/marc/bibliographic/bd084.html
  */
 public class Tag084 extends DataFieldDefinition {
@@ -41,9 +41,9 @@ public class Tag084 extends DataFieldDefinition {
   private void initialize() {
 
     tag = "084";
-    label = "Other Classification Number";
+    label = "Other Classificaton Number";
     bibframeTag = "Classification";
-    // mqTag = "OtherClassificationNumber";
+    // mqTag = "OtherClassificatonNumber";
     cardinality = Cardinality.Repeatable;
     descriptionUrl = "https://www.loc.gov/marc/bibliographic/bd084.html";
     setCompilanceLevels("A");

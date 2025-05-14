@@ -1,16 +1,8 @@
-# Avram Schema files
-
-To validate the files (and more schema files in this repository), run
-
-```bash
-./avram-schemas/validate-schemas
-```
-
-## MARC 
+# MARC metadata schema in Avram compatible JSON
 
 This directory contains the following versions of the MARC21 schema:
 
-* `marc.json` -- MARC21 bibliographic schema as defined by the Library of Congress
+* `marc-schema.json` -- MARC21 bibliographic schema as defined by the Library of Congress
 * `marc-schema-with-solr.json` -- with Solr field mapping
 * `marc-schema-with-solr-and-extensions.json` -- with Solr field mapping and with locally defined fields of the following libraries: 
 
@@ -30,17 +22,14 @@ This directory contains the following versions of the MARC21 schema:
 | ZB | Zentralbibliothek Zürich (Switzerland) |
 | OGYK | Országygyűlési Könyvtár, Budapest (Hungary) |
 
-To generate the marc files, run
+To generate these files, run
 
 ```bash
 ./qa-catalogue export-schema-files
 ```
 
-## UNIMARC
+To validate the files, run
 
-- `unimarc.json`
-
-## PICA
-
-- `k10plus-title.json` (update with `update-avram-k10plus-title.sh`) -- the default Avram schema for K10plus catalogue
-
+```bash
+./avram-schemas/validate-schemas
+```

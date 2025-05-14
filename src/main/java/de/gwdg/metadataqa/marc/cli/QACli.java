@@ -58,7 +58,6 @@ public abstract class QACli<T extends CommonParameters> {
     ObjectMapper mapper = new ObjectMapper();
     try {
       String json = mapper.writeValueAsString(parameters);
-      logger.info("json: " + json);
       Map<String, Object> configuration = mapper.readValue(json, new TypeReference<>(){});
       configuration.put("mqaf.version", de.gwdg.metadataqa.api.cli.Version.getVersion());
       configuration.put("qa-catalogue.version", de.gwdg.metadataqa.marc.cli.Version.getVersion());
@@ -94,6 +93,7 @@ public abstract class QACli<T extends CommonParameters> {
       for (String groupId : groupIds)
         printToFile(idCollectorFile, CsvUtils.createCsv(recordId, groupId));
   }
+
 
   public static Set<String> extractGroupIds(List<String> idLists) {
     Set<String> groupIds = new HashSet<>();
@@ -204,15 +204,6 @@ public abstract class QACli<T extends CommonParameters> {
         throw new RuntimeException(e);
       }
       isJarModifiedTimeDetected = true;
-    }
-  }
-
-  protected void copyFileToOutputDir(String fileName) {
-    File source = new File(fileName);
-    try {
-      FileUtils.copyFileToDirectory(source, new File(parameters.getOutputDir()));
-    } catch (IOException e) {
-      logger.warning(e.getLocalizedMessage());
     }
   }
 }

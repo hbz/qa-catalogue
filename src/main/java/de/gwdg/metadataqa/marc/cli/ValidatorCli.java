@@ -113,7 +113,6 @@ public class ValidatorCli extends QACli<ValidatorParameters> implements Bibliogr
     }
     RecordIterator iterator = new RecordIterator(processor);
     iterator.setProcessWithErrors(true);
-    // iterator.setProcessWithErrors(processor.getParameters().getProcessRecordsWithoutId());
     iterator.start();
   }
 
@@ -173,8 +172,8 @@ public class ValidatorCli extends QACli<ValidatorParameters> implements Bibliogr
   }
 
   @Override
-  public void processRecord(BibliographicRecord bibliographicRecord, int recordNumber) throws IOException {
-    processRecord(bibliographicRecord, recordNumber, null);
+  public void processRecord(BibliographicRecord marcRecord, int recordNumber) throws IOException {
+    processRecord(marcRecord, recordNumber, null);
   }
 
   @Override

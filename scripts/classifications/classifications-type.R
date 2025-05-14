@@ -49,7 +49,7 @@ count <- df %>%
   arrange(desc(recordcount))
 
 df2 <- count %>% 
-  left_join(types, by = join_by(scheme))
+  left_join(types)
 
 prefix <- 'classifications-by-type'
 csv <- sprintf("%s/%s.csv", output_dir, prefix)

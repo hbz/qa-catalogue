@@ -71,7 +71,6 @@ public class ClassificationAnalysis extends QACli<ClassificationParameters> impl
       System.exit(0);
     }
     RecordIterator iterator = new RecordIterator(processor);
-    iterator.setProcessWithErrors(processor.getParameters().getProcessRecordsWithoutId());
     iterator.start();
   }
 
@@ -86,8 +85,8 @@ public class ClassificationAnalysis extends QACli<ClassificationParameters> impl
   }
 
   @Override
-  public void processRecord(BibliographicRecord bibliographicRecord, int recordNumber, List<ValidationError> errors) throws IOException {
-    processRecord(bibliographicRecord, recordNumber);
+  public void processRecord(BibliographicRecord marcRecord, int recordNumber, List<ValidationError> errors) throws IOException {
+    // do nothing
   }
 
   @Override
@@ -144,7 +143,7 @@ public class ClassificationAnalysis extends QACli<ClassificationParameters> impl
     printClassificationsHistogram();
     printFrequencyExamples();
     printSchemaSubfieldsStatistics();
-    if (parameters.isDoCollectCollocations())
+    if (parameters.doCollectCollocations())
       printClassificationsCollocation();
     copySchemaFileToOutputDir();
     saveParameters("classifications.params.json", parameters, Map.of("numberOfprocessedRecords", numberOfprocessedRecords, "duration", duration));

@@ -1,64 +1,127 @@
 package de.gwdg.metadataqa.marc.utils.marcspec;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Subfield {
-  private String subfield;
-  private Range position;
-  private Range index;
+  private String tag;
+
+  private Integer charStart;
+  private Integer charEnd;
+  private Integer charLength;
+  private Positions characterPositions;
+
+  private Position indexStart;
+  private Position indexEnd;
+  private Integer indexLength;
+  private Positions indexPositions;
+
+  private List<SubSpec> subSpecs = new ArrayList<>();
 
   public Subfield() {
   }
 
-  public Subfield(String subfield) {
-    this.subfield = subfield;
+  public Subfield(String tag) {
+    this.tag = tag;
   }
 
-  public String getSubfield() {
-    return subfield;
+  public String getTag() {
+    return tag;
   }
 
-  public void setSubfield(String subfield) {
-    this.subfield = subfield;
+  public void setTag(String tag) {
+    this.tag = tag;
   }
 
-  public Range getPosition() {
-    return position;
+  public Integer getCharStart() {
+    return charStart;
   }
 
-  public boolean hasPosition() {
-    return position != null;
+  public void setCharStart(Integer charStart) {
+    this.charStart = charStart;
   }
 
-  public void setPosition(Range position) {
-    this.position = position;
+  public Integer getCharEnd() {
+    return charEnd;
   }
 
-  public Range getIndex() {
-    return index;
+  public void setCharEnd(Integer charEnd) {
+    this.charEnd = charEnd;
   }
 
-  public boolean hasIndex() {
-    return index != null;
+  public Integer getCharLength() {
+    return charLength;
   }
 
-  public void setIndex(Range index) {
-    this.index = index;
+  public void setCharLength(Integer charLength) {
+    this.charLength = charLength;
+  }
+
+  public Position getIndexStart() {
+    return indexStart;
+  }
+
+  public void setIndexStart(Position indexStart) {
+    this.indexStart = indexStart;
+  }
+
+  public Position getIndexEnd() {
+    return indexEnd;
+  }
+
+  public void setIndexEnd(Position indexEnd) {
+    this.indexEnd = indexEnd;
+  }
+
+  public Integer getIndexLength() {
+    return indexLength;
+  }
+
+  public void setIndexLength(Integer indexLength) {
+    this.indexLength = indexLength;
+  }
+
+  public List<SubSpec> getSubSpecs() {
+    return subSpecs;
+  }
+
+  public void setSubSpecs(List<SubSpec> subSpecs) {
+    this.subSpecs = subSpecs;
+  }
+
+  public Positions getIndexPositions() {
+    return indexPositions;
+  }
+
+  public void setIndexPositions(Positions indexPositions) {
+    this.indexPositions = indexPositions;
+  }
+
+  public Positions getCharacterPositions() {
+    return characterPositions;
+  }
+
+  public void setCharacterPositions(Positions characterPositions) {
+    this.characterPositions = characterPositions;
+  }
+
+  public void addSubSpec(SubSpec subSpec) {
+    subSpecs.add(subSpec);
   }
 
   @Override
   public String toString() {
     return "Subfield{" +
-      "subfield='" + subfield + '\'' +
-      ", position=" + position +
-      ", index=" + index +
+      "tag='" + tag + '\'' +
+      ", charStart=" + charStart +
+      ", charEnd=" + charEnd +
+      ", charLength=" + charLength +
+      ", characterPositions=" + characterPositions +
+      ", indexStart=" + indexStart +
+      ", indexEnd=" + indexEnd +
+      ", indexLength=" + indexLength +
+      ", indexPositions=" + indexPositions +
+      ", subSpecs=" + subSpecs +
       '}';
-  }
-
-  public String encode() {
-    String encoded = subfield;
-    if (hasIndex())
-      encoded += "[" + index.encode() + "]";
-    if (hasPosition())
-      encoded += "/" + position.encode();
-    return encoded;
   }
 }

@@ -1,9 +1,0 @@
----
-title: "Special build process"
----
-
-"deployment" build (when deploying artifacts to Maven Central)
-```
-mvn clean deploy -Pdeploy
-```
-

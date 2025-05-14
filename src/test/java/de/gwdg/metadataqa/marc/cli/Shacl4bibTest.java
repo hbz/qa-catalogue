@@ -150,9 +150,7 @@ public class Shacl4bibTest extends CliTestUtils {
     RuleCatalog ruleCatalog = RuleCatalogUtils.create(schema);
 
     MarcSpecSelector selector = new MarcSpecSelector(marcRecord);
-    Object extracted = selector.extract("245");
-    List<DataField> fields = (List<DataField>) extracted;
-    assertEquals("DataField{245, ind1='0', ind2='0', subfields=[MarcSubfield{code='6', value='880-01'}, MarcSubfield{code='a', value='iPhone the Bible wan jia sheng jing.'}]}", fields.get(0).toString());
+    assertEquals("880-01 iPhone the Bible wan jia sheng jing.", selector.extract("245").get(0));
     List<Object> values = RuleCatalogUtils.extract(ruleCatalog, ruleCatalog.measure(selector));
     assertEquals("1", CsvUtils.createCsvFromObjects(values).trim());
   }
@@ -180,9 +178,7 @@ public class Shacl4bibTest extends CliTestUtils {
     RuleCatalog ruleCatalog = RuleCatalogUtils.create(schema);
 
     MarcSpecSelector selector = new MarcSpecSelector(marcRecord);
-    Object extracted = selector.extract("245");
-    List<DataField> fields = (List<DataField>) extracted;
-    assertEquals("DataField{245, ind1='0', ind2='0', subfields=[MarcSubfield{code='6', value='880-01'}, MarcSubfield{code='a', value='iPhone the Bible wan jia sheng jing.'}]}", fields.get(0).toString());
+    assertEquals("880-01 iPhone the Bible wan jia sheng jing.", selector.extract("245").get(0));
     List<Object> values = RuleCatalogUtils.extract(ruleCatalog, ruleCatalog.measure(selector));
     assertEquals(List.of("300$a"), ruleCatalog.getHeader());
     assertEquals("1", CsvUtils.createCsvFromObjects(values).trim());
@@ -206,10 +202,7 @@ public class Shacl4bibTest extends CliTestUtils {
     RuleCatalog ruleCatalog = RuleCatalogUtils.create(schema);
 
     MarcSpecSelector selector = new MarcSpecSelector(marcRecord);
-    Object extracted = selector.extract("245");
-    List<DataField> list = (List<DataField>) extracted;
-    assertEquals("DataField{245, ind1='0', ind2='0', subfields=[MarcSubfield{code='6', value='880-01'}, MarcSubfield{code='a', value='iPhone the Bible wan jia sheng jing.'}]}",
-      list.get(0).toString());
+    assertEquals("880-01 iPhone the Bible wan jia sheng jing.", selector.extract("245").get(0));
     List<Object> values = RuleCatalogUtils.extract(ruleCatalog, ruleCatalog.measure(selector));
     assertEquals(List.of("300$a"), ruleCatalog.getHeader());
     assertEquals("0", CsvUtils.createCsvFromObjects(values).trim());

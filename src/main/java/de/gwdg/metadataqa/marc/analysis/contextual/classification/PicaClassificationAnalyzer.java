@@ -35,6 +35,7 @@ public class PicaClassificationAnalyzer extends ClassificationAnalyzer {
   }
 
   public int process() {
+    logger.log(Level.INFO, "Classifying PICA record");
     var total = 0;
     schemasInRecord = new ArrayList<>();
 

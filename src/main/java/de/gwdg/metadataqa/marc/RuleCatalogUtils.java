@@ -11,15 +11,7 @@ import de.gwdg.metadataqa.api.util.CompressionLevel;
 import java.util.List;
 
 public class RuleCatalogUtils {
-
-  /**
-   * Transform result to a list
-   * @param ruleCatalog
-   * @param results
-   * @return
-   */
-  public static List<Object> extract(RuleCatalog ruleCatalog,
-                                     List<MetricResult> results) {
+  public static List<Object> extract(RuleCatalog ruleCatalog, List<MetricResult> results) {
     MetricCollector collector = new MetricCollector();
     collector.addResult(ruleCatalog, results, CompressionLevel.NORMAL);
     return (List<Object>) collector.createOutput(OutputCollector.TYPE.STRING_LIST, CompressionLevel.NORMAL);

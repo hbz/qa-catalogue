@@ -79,7 +79,6 @@ public class SerialScore extends QACli<SerialScoreParameters> implements Bibliog
     }
 
     RecordIterator iterator = new RecordIterator(processor);
-    iterator.setProcessWithErrors(processor.getParameters().getProcessRecordsWithoutId());
     iterator.start();
   }
 
@@ -116,8 +115,8 @@ public class SerialScore extends QACli<SerialScoreParameters> implements Bibliog
   }
 
   @Override
-  public void processRecord(BibliographicRecord bibliographicRecord, int recordNumber, List<ValidationError> errors) throws IOException {
-    processRecord(bibliographicRecord, recordNumber);
+  public void processRecord(BibliographicRecord marcRecord, int recordNumber, List<ValidationError> errors) throws IOException {
+    // do nothing
   }
 
   @Override

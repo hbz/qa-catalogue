@@ -249,8 +249,7 @@ public class CommonParametersTest {
         "alephseqLineType: null\n" +
         "groupBy: null\n" +
         "groupListFile: null\n" +
-        "solrForScoresUrl: null\n" +
-        "processRecordsWithoutId: false\n";
+        "solrForScoresUrl: null\n";
       expected = expected.replaceAll("\n", System.lineSeparator());
       assertEquals(expected, parameters.formatParameters());
     } catch (ParseException e) {
@@ -351,9 +350,8 @@ public class CommonParametersTest {
     }
     assertEquals("RecordIgnoratorMarc21", parameters.getRecordIgnorator().getClass().getSimpleName());
     assertEquals(
-      "[Condition{tag='STA', subfield='a', operator=EQUAL1, value='SUPPRESSED', pattern=null, useEqual=true, usePattern=false, negate=false}]",
-      parameters.getRecordIgnorator().toString()
-    );
+      "[DataField{STA, ind1=' ', ind2=' ', subfields=[MarcSubfield{code='a', value='SUPPRESSED'}]}]",
+      ((RecordIgnoratorMarc21)parameters.getRecordIgnorator()).toString());
   }
 
   @Test
@@ -383,9 +381,8 @@ public class CommonParametersTest {
     }
     assertEquals("RecordFilterMarc21", parameters.getRecordFilter().getClass().getSimpleName());
     assertEquals(
-      "[Condition{tag='STA', subfield='a', operator=EQUAL1, value='SUPPRESSED', pattern=null, useEqual=true, usePattern=false, negate=false}]",
-      parameters.getRecordFilter().toString()
-    );
+      "[DataField{STA, ind1=' ', ind2=' ', subfields=[MarcSubfield{code='a', value='SUPPRESSED'}]}]",
+      ((RecordFilterMarc21)parameters.getRecordFilter()).toString());
   }
 
 }

@@ -31,7 +31,6 @@ scala/project
 scala/target
 scripts/cli-generator/*.sh.txt
 metadata-qa-api/
-solr-data/
 
 # default input and output base directory
 input
@@ -60,6 +59,3 @@ web-config/configuration.cnf
 
 # Node packages
 node_modules
-
-# HTML docs of Avram
-avram-schemas/*.html

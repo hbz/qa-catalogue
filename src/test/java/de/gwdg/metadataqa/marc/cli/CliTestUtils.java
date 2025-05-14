@@ -26,11 +26,4 @@ public class CliTestUtils {
       if (!file.delete())
         System.err.format("File/directory %s hasn't been deleted!\n", file);
   }
-
-  protected static File[] listDir(File dir) {
-    if (dir.exists() && dir.isDirectory()) {
-      return dir.listFiles();
-    }
-    return null;
-  }
 }

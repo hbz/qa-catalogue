@@ -5,9 +5,7 @@
 . ./setdir.sh
 
 NAME=onb
-TYPE_PARAMS=" --emptyLargeCollectors --fixAlma"
-# index parameters
-TYPE_PARAMS="${TYPE_PARAMS} --indexWithTokenizedField --indexFieldCounts --indexSubfieldCounts"
+TYPE_PARAMS=" --emptyLargeCollectors --fixAlma --indexWithTokenizedField"
 MASK=onb*.mrc.gz
 
 . ./common-script

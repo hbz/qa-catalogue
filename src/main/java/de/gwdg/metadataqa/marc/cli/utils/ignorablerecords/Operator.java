@@ -1,7 +1,6 @@
 package de.gwdg.metadataqa.marc.cli.utils.ignorablerecords;
 
 public enum Operator {
-  EQUAL1("="),
   EQUAL("=="),
   NOT_EQUAL("!="),
   MATCH("=~"),
@@ -25,4 +24,5 @@ public enum Operator {
         return item;
     throw new IllegalArgumentException(String.format("unsupported operator: '%s'", operator));
   }
+
 }

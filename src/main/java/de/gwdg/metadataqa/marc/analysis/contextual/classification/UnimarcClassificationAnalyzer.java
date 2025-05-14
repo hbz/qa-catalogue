@@ -57,6 +57,7 @@ public class UnimarcClassificationAnalyzer extends MarcClassificationAnalyzer {
 
   @Override
   public int process() {
+    logger.log(Level.INFO, "Classifying UNIMARC record");
     var total = 0;
     schemasInRecord = new ArrayList<>();
 

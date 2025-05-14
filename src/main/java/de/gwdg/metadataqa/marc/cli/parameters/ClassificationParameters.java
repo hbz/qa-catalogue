@@ -29,7 +29,7 @@ public class ClassificationParameters extends CommonParameters implements Serial
   }
 
 
-  public boolean isDoCollectCollocations() {
+  public boolean doCollectCollocations() {
     return collectCollocations;
   }
 

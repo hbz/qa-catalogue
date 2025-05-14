@@ -16,8 +16,7 @@ import de.gwdg.metadataqa.marc.definition.structure.DataFieldDefinition;
 import de.gwdg.metadataqa.marc.definition.structure.Indicator;
 import de.gwdg.metadataqa.marc.model.SolrFieldType;
 import de.gwdg.metadataqa.marc.utils.SchemaSpec;
-import de.gwdg.metadataqa.marc.utils.marcspec.MarcSpec;
-import de.gwdg.metadataqa.marc.utils.marcspec.MarcSpecExtractor;
+import de.gwdg.metadataqa.marc.utils.marcspec.legacy.MarcSpec;
 import de.gwdg.metadataqa.marc.utils.unimarc.UnimarcConverter;
 import org.apache.commons.lang3.StringUtils;
 
@@ -416,24 +415,12 @@ public abstract class BibliographicRecord implements Extractable, Serializable {
    * @return The final result of the selection
    */
   public List<String> select(SchemaSpec selector) {
-    /*
-    if (selector instanceof MarcSpec) {
-      MarcSpec spec = (MarcSpec) selector;
-      if (!datafieldIndex.containsKey(spec.getFieldTag())) {
-        return new ArrayList<>();
-      }
-      return selectDatafields(spec);
-    }
-    else if (selector instanceof MarcSpec2) {
+    MarcSpec marcSpec = (MarcSpec) selector;
 
-     */
-      MarcSpec spec = (MarcSpec) selector;
-      if (!datafieldIndex.containsKey(spec.getTag())) {
-        return new ArrayList<>();
-      }
-      return selectDatafields(spec);
-    // }
-    // return new ArrayList<>();
+    if (!datafieldIndex.containsKey(marcSpec.getFieldTag())) {
+      return new ArrayList<>();
+    }
+    return selectDatafields(marcSpec);
   }
 
   /**
@@ -445,7 +432,6 @@ public abstract class BibliographicRecord implements Extractable, Serializable {
    * @param selector The selector that lists subfields to select.
    * @return The final result of the selection.
    */
-  /*
   protected List<String> selectDatafield(DataField field, MarcSpec selector) {
     List<String> selectedResults = new ArrayList<>();
     if (field == null) {
@@ -474,9 +460,6 @@ public abstract class BibliographicRecord implements Extractable, Serializable {
     return selectedResults;
   }
 
-   */
-
-  /*
   protected List<String> selectDatafields(MarcSpec selector) {
     List<String> selectedResults = new ArrayList<>();
 
@@ -489,24 +472,6 @@ public abstract class BibliographicRecord implements Extractable, Serializable {
     }
 
     return selectedResults;
-  }
-  */
-
-  protected <T extends Object>  List<T> selectDatafields(MarcSpec selector) {
-    return (List<T>) MarcSpecExtractor.extract((Marc21Record) this, selector);
-    /*
-    List<String> selectedResults = new ArrayList<>();
-
-    String selectorFieldTag = selector.getTag();
-    List<DataField> selectedDatafields = datafieldIndex.get(selectorFieldTag);
-
-    for (DataField field : selectedDatafields) {
-      List<String> selectedFromDatafield = selectDatafield(field, selector);
-      selectedResults.addAll(selectedFromDatafield);
-    }
-
-    return selectedResults;
-    */
   }
 
 
@@ -644,6 +609,7 @@ public abstract class BibliographicRecord implements Extractable, Serializable {
   }
 
   public abstract List<String> getAllowedControlFieldTags();
+
 
   public abstract Map<ShelfReadyFieldsBooks, Map<String, List<String>>> getShelfReadyMap();
 

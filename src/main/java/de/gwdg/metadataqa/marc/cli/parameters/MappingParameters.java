@@ -31,6 +31,7 @@ public class MappingParameters {
       options.addOption("f", "withFrbrFunctions", false, "with FRBR functions");
       options.addOption("l", "withComplianceLevel", false, "with compilance levels (national, minimal)");
       options.addOption("d", "withLocallyDefinedFields", false, "with locally defined fields");
+      options.addOption("h", "help", false, "display help");
       isOptionSet = true;
     }
   }

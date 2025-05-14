@@ -5,9 +5,7 @@
 . ./setdir.sh
 
 NAME=libris
-TYPE_PARAMS="--emptyLargeCollectors --marcxml"
-# index parameters
-TYPE_PARAMS="${TYPE_PARAMS} --indexWithTokenizedField --indexFieldCounts --indexSubfieldCounts"
+TYPE_PARAMS="--emptyLargeCollectors --marcxml --indexWithTokenizedField"
 MASK=sw-?.xml.gz
 
 . ./common-script

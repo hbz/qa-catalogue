@@ -69,12 +69,10 @@ RUN cd /opt \
  && unzip qa-catalogue-${QA_CATALOGUE_VERSION}-release.zip \
  && rm qa-catalogue-${QA_CATALOGUE_VERSION}-release.zip \
  && mv qa-catalogue-${QA_CATALOGUE_VERSION} qa-catalogue \
- && cd qa-catalogue \
- && mkdir -p marc/input marc/output marc/logs web-config \
- && mv setdir.sh.template setdir.sh \
- && sed -i.bak 's,\(BASE_INPUT_DIR=\)./input,\1/opt/qa-catalogue/marc/input,' setdir.sh \
- && sed -i.bak 's,\(BASE_OUTPUT_DIR=\)./output,\1/opt/qa-catalogue/marc/output,' setdir.sh \
- && sed -i.bak 's,\(BASE_LOG_DIR=\)./logs,\1/opt/qa-catalogue/marc/logs,' setdir.sh
+ && mv /opt/qa-catalogue/setdir.sh.template /opt/qa-catalogue/setdir.sh \
+ && sed -i.bak 's,BASE_INPUT_DIR=./input,BASE_INPUT_DIR=/opt/qa-catalogue/input,' /opt/qa-catalogue/setdir.sh \
+ && sed -i.bak 's,BASE_OUTPUT_DIR=./output,BASE_OUTPUT_DIR=/opt/qa-catalogue/output,' /opt/qa-catalogue/setdir.sh \
+ && mkdir -p /opt/qa-catalogue/input /opt/qa-catalogue/output
 
 # install web application
 RUN apt-get update \

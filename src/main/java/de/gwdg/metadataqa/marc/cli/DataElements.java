@@ -70,7 +70,6 @@ public class DataElements implements BibliographicInputProcessor, Serializable {
       System.exit(0);
     }
     RecordIterator iterator = new RecordIterator(processor);
-    iterator.setProcessWithErrors(processor.getParameters().getProcessRecordsWithoutId());
     iterator.start();
   }
 
@@ -85,16 +84,16 @@ public class DataElements implements BibliographicInputProcessor, Serializable {
   }
 
   @Override
-  public void processRecord(BibliographicRecord bibliographicRecord, int recordNumber, List<ValidationError> errors) throws IOException {
-    processRecord(bibliographicRecord, recordNumber);
+  public void processRecord(BibliographicRecord marcRecord, int recordNumber, List<ValidationError> errors) throws IOException {
+    // do nothing
   }
 
   @Override
-  public void processRecord(BibliographicRecord bibliographicRecord, int recordNumber) throws IOException {
-    if (parameters.getRecordIgnorator().isIgnorable(bibliographicRecord))
+  public void processRecord(BibliographicRecord marcRecord, int recordNumber) throws IOException {
+    if (parameters.getRecordIgnorator().isIgnorable(marcRecord))
       return;
 
-    printToFile(outputFile, StringUtils.join(dataElementCounter.count(bibliographicRecord), ",") + "\n");
+    printToFile(outputFile, StringUtils.join(dataElementCounter.count(marcRecord), ",") + "\n");
   }
 
   @Override
