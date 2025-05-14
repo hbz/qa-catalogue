@@ -22,3 +22,8 @@ services:
       - "${WEBPORT:-8000}:80"       # qa-catalogue-web
       - "${SOLRPORT:-8983}:8983"  # Solr
     container_name: ${CONTAINER:-metadata-qa-marc}
+    deploy:
+      resources:
+        limits:
+          cpus: '4.0' # number of cores
+          memory: 8GB
