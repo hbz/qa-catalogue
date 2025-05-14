@@ -8,9 +8,9 @@ services:
       context: .
       dockerfile: Dockerfile
     volumes:
-      - ./${INPUT:-input}:/opt/qa-catalogue/input
-      - ./${OUTPUT:-output}:/opt/qa-catalogue/output
-      - ./logs:/opt/qa-catalogue/logs
+      - ./${INPUT:-input}:/opt/qa-catalogue/marc/input
+      - ./${OUTPUT:-output}:/opt/qa-catalogue/marc/output
+      - ./${LOGS:-logs}:/opt/qa-catalogue/marc/logs
       - ./solr:/opt/solr
       - ./catalogues:/opt/qa-catalogue/catalogues
       - ./web-classes/catalogue:/var/www/html/qa-catalogue/classes/catalogue
