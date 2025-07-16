@@ -2,7 +2,7 @@
 
 . ./setdir.sh
 
-NAME=hbz
+NAME=hbz-lobid-publishing
 TYPE=xml
 if [[ $TYPE == "marc" ]]; then
   echo "marc"
