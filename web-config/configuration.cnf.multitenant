@@ -1,0 +1,16 @@
+multitenant=true
+
+id=hbz
+catalogue[hbz]=hbz
+indexName[hbz]=hbz
+dirName[hbz]=hbz
+
+id=hbz-update
+catalogue[hbz-update]=hbz_update
+indexName[hbz-update]=hbz-update
+dirName[hbz-update]=hbz-update
+
+id=hbz-lobid-publishing
+catalogue[hbz-lobid-publishing]=hbz_lobid_publishing
+indexName[hbz-lobid-publishing]=hbz-lobid-publishing
+dirName[hbz-lobid-publishing]=hbz-lobid-publishing
