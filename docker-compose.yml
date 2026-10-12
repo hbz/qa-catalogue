@@ -7,6 +7,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        SOLR_VERSION: 8.11.1
+        SOLR_INSTALL_SOURCE: download/download/solr-8.11.1.zip
     volumes:
       - ./${INPUT:-input}:/opt/qa-catalogue/input
       - ./${OUTPUT:-output}:/opt/qa-catalogue/output
