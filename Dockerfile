@@ -1,4 +1,5 @@
-FROM openjdk:11-jdk AS build
+#FROM openjdk:11-jdk AS build
+FROM adoptopenjdk/openjdk11:x86_64-ubuntu-jdk-11.0.29_7 AS build
 RUN apt-get update && apt-get install -y --no-install-recommends \
   maven \
   && rm -rf /var/lib/apt/lists/*
@@ -133,7 +134,8 @@ RUN apt-get update \
 # hbz: create symlinks
 RUN cd /var/www/html \
  && ln -s qa-catalogue hbz \
- && ln -s qa-catalogue hbz-update
+ && ln -s qa-catalogue hbz-update \
+ && ln -s qa-catalogue hbz-nz-publishing
 
 # install Solr
 COPY ${SOLR_INSTALL_SOURCE}* /opt

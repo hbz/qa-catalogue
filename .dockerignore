@@ -2,3 +2,8 @@ scripts/downloaders
 scripts/record-patterns/
 scripts/sqlite/import-issue-details.php
 scripts/sqlite/import-issue-summary.php
+apache2
+logs
+output
+solr
+download

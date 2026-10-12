@@ -24,7 +24,7 @@ if [[ -s "/tmp/newfiles$$" ]] ; then
     touch "$RUNNINGFILE"
     cd $APPDIR
     docker exec -i metadata-qa-marc ./catalogues/${CATALOGUE}.sh ${TASKS}
-    echo "$(date) Finished analysis for ${CATALOGUE}!" | tee | mail -s "QA catalogue: Finished!" $MAILRECIPIENT
+    echo -e "$(date) Finished analysis for ${CATALOGUE}!\nYou might need to change the GUI config in web-config and web-classes directories." | tee | mail -s "QA catalogue: Finished!" $MAILRECIPIENT
     rm "$RUNNINGFILE"
     touch "$CHECKFILE"
     rm "/tmp/newfiles$$"
