@@ -10,6 +10,7 @@ services:
       args:
         SOLR_VERSION: 8.11.1
         SOLR_INSTALL_SOURCE: download
+    restart: unless-stopped
     #user: "1006:0"
     volumes:
       - ./${INPUT:-input}:/opt/qa-catalogue/input
