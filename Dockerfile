@@ -150,7 +150,7 @@ RUN echo "install solr" \
       SOLR_DOWNLOAD_PATH="lucene/solr" ; \
       SOLR_EXTRACT_METHOD="zip" ; \
     fi \
- && if [ ! -f solr-${SOLR_PACKAGE} ]; then \
+ && if [ ! -f "${SOLR_PACKAGE}" ]; then \
       DOWNLOAD_URL=https://archive.apache.org/dist/${SOLR_DOWNLOAD_PATH}/${SOLR_VERSION}/${SOLR_PACKAGE} ; \
       curl -L ${DOWNLOAD_URL} --output /opt/${SOLR_PACKAGE} ; \
     fi \
